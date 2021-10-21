@@ -1,17 +1,20 @@
-package life.league.challenge.kotlin.ui
+package life.league.challenge.kotlin.ui.post
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.data.api.Service
 import life.league.challenge.kotlin.data.api.getUsers
 import life.league.challenge.kotlin.data.api.login
+import life.league.challenge.kotlin.ui.model.User
+import life.league.challenge.kotlin.ui.model.toUiModel
 import life.league.challenge.kotlin.util.logE
 import life.league.challenge.kotlin.util.logV
 
 class PostViewModel : ViewModel() {
+
+    private var _users = MutableLiveData<List<User>>()
+    val users: LiveData<List<User>> get() = _users
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -25,9 +28,15 @@ class PostViewModel : ViewModel() {
         }
     }
 
-    private suspend fun getUsers(apiKey: String) {
-        val users = Service.api.getUsers(apiKey)
-        logV(users.toString())
+    private fun getUsers(apiKey: String) {
+        viewModelScope.launch {
+            val users = Service.api.getUsers(apiKey)
+
+            _users.value = users.map { user ->
+                user.toUiModel()
+            }
+        }
+
     }
 }
 

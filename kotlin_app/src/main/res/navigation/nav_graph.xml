@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/postFragment"
-        android:name="life.league.challenge.kotlin.ui.PostFragment"
+        android:name="life.league.challenge.kotlin.ui.post.PostFragment"
         android:label="PostFragment"
         tools:layout="@layout/fragment_post" />
 </navigation>
