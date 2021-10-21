@@ -6,11 +6,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.data.api.Service
+import life.league.challenge.kotlin.data.api.getUsers
 import life.league.challenge.kotlin.data.api.login
 import life.league.challenge.kotlin.util.logE
 import life.league.challenge.kotlin.util.logV
 
-class MainViewModel : ViewModel() {
+class PostViewModel : ViewModel() {
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -30,6 +31,6 @@ class MainViewModel : ViewModel() {
     }
 }
 
-class MainViewModelFactory : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = modelClass.cast(MainViewModel())!!
+class PostViewModelFactory : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T = modelClass.cast(PostViewModel())!!
 }
