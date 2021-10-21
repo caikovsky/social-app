@@ -27,10 +27,16 @@ class MainActivity : AppCompatActivity() {
             try {
                 val account = Service.api.login("hello", "world")
                 logV(account.apiKey ?: "")
+                account.apiKey?.let { getUsers(it) }
             } catch (t: Throwable) {
                 logE(t)
             }
         }
+    }
+
+    private suspend fun getUsers(apiKey: String) {
+        val users = Service.api.getUsers(apiKey)
+        logV(users.toString() ?: "")
     }
 
 }
