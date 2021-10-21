@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.data.api.Service
+import life.league.challenge.kotlin.data.api.getPosts
 import life.league.challenge.kotlin.data.api.getUsers
 import life.league.challenge.kotlin.data.api.login
 import life.league.challenge.kotlin.ui.model.User
@@ -33,8 +34,17 @@ class PostViewModel : ViewModel() {
             val users = Service.api.getUsers(apiKey)
 
             _users.value = users.map { user ->
+                getPosts(apiKey, user.id)
                 user.toUiModel()
             }
+        }
+
+    }
+
+    private fun getPosts(apiKey: String, userId: Int) {
+        viewModelScope.launch {
+            val posts = Service.api.getPosts(apiKey, userId)
+            logV(posts.toString())
         }
 
     }
