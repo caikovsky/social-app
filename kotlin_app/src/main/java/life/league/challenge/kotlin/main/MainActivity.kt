@@ -1,7 +1,6 @@
 package life.league.challenge.kotlin.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -9,12 +8,10 @@ import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.R
 import life.league.challenge.kotlin.data.api.Service
 import life.league.challenge.kotlin.data.api.login
+import life.league.challenge.kotlin.util.logE
+import life.league.challenge.kotlin.util.logV
 
 class MainActivity : AppCompatActivity() {
-
-    companion object {
-        private const val TAG = "MainActivity"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +26,9 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val account = Service.api.login("hello", "world")
-                Log.v(TAG, account.apiKey ?: "")
-            } catch (t : Throwable) {
-                Log.e(TAG, t.message, t)
+                logV(account.apiKey ?: "")
+            } catch (t: Throwable) {
+                logE(t)
             }
         }
     }
