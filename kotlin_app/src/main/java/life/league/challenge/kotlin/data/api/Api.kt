@@ -2,9 +2,11 @@ package life.league.challenge.kotlin.data.api
 
 import android.util.Base64
 import life.league.challenge.kotlin.data.model.AccountResponse
+import life.league.challenge.kotlin.data.model.PostResponse
 import life.league.challenge.kotlin.data.model.UserResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Query
 
 /**
  * Retrofit API interface definition using coroutines. Feel free to change this implementation to
@@ -18,6 +20,12 @@ interface Api {
     @GET("users")
     suspend fun users(@Header("x-access-token") accessToken: String): List<UserResponse>
 
+    @GET("posts")
+    suspend fun posts(
+        @Header("x-access-token") accessToken: String,
+        @Query("id") userId: Int
+    ): List<PostResponse>
+
 }
 
 /**
@@ -27,3 +35,5 @@ suspend fun Api.login(username: String, password: String) =
     login("Basic " + Base64.encodeToString("$username:$password".toByteArray(), Base64.NO_WRAP))
 
 suspend fun Api.getUsers(apiKey: String) = users(accessToken = apiKey)
+
+suspend fun Api.getPosts(apiKey: String, userId: Int) = posts(accessToken = apiKey, userId = userId)
