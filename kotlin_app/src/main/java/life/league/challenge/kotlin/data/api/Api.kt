@@ -16,7 +16,7 @@ interface Api {
     suspend fun login(@Header("Authorization") credentials: String?): AccountResponse
 
     @GET("users")
-    suspend fun getUsers(@Header("x-access-token") apiKey: String): List<UserResponse>
+    suspend fun users(@Header("x-access-token") accessToken: String): List<UserResponse>
 
 }
 
@@ -26,4 +26,4 @@ interface Api {
 suspend fun Api.login(username: String, password: String) =
     login("Basic " + Base64.encodeToString("$username:$password".toByteArray(), Base64.NO_WRAP))
 
-suspend fun Api.getUsers(apiKey: String) = getUsers(apiKey)
+suspend fun Api.getUsers(apiKey: String) = users(accessToken = apiKey)
