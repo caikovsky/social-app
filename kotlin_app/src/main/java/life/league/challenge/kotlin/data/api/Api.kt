@@ -1,7 +1,7 @@
-package life.league.challenge.kotlin.api
+package life.league.challenge.kotlin.data.api
 
-import life.league.challenge.kotlin.model.Account
-import retrofit2.Call
+import android.util.Base64
+import life.league.challenge.kotlin.data.model.AccountResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
 
@@ -12,7 +12,7 @@ import retrofit2.http.Header
 interface Api {
 
     @GET("login")
-    suspend fun login(@Header("Authorization") credentials: String?): Account
+    suspend fun login(@Header("Authorization") credentials: String?): AccountResponse
 
 }
 
@@ -20,4 +20,4 @@ interface Api {
  * Overloaded Login API extension function to handle authorization header encoding
  */
 suspend fun Api.login(username: String, password: String)
-        = login("Basic " + android.util.Base64.encodeToString("$username:$password".toByteArray(), android.util.Base64.NO_WRAP))
+        = login("Basic " + Base64.encodeToString("$username:$password".toByteArray(), Base64.NO_WRAP))

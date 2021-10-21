@@ -1,4 +1,4 @@
-package life.league.challenge.kotlin.api
+package life.league.challenge.kotlin.data.api
 
 import life.league.challenge.kotlin.BuildConfig
 import okhttp3.OkHttpClient

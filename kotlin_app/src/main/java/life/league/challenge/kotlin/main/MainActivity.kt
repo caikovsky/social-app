@@ -7,8 +7,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.R
-import life.league.challenge.kotlin.api.Service
-import life.league.challenge.kotlin.api.login
+import life.league.challenge.kotlin.data.api.Service
+import life.league.challenge.kotlin.data.api.login
 
 class MainActivity : AppCompatActivity() {
 
