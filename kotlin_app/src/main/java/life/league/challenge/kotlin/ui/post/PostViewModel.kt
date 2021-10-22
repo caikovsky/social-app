@@ -11,7 +11,6 @@ import life.league.challenge.kotlin.ui.model.Post
 import life.league.challenge.kotlin.ui.model.User
 import life.league.challenge.kotlin.ui.model.toUiModel
 import life.league.challenge.kotlin.util.logE
-import life.league.challenge.kotlin.util.logV
 
 class PostViewModel : ViewModel() {
 
@@ -22,11 +21,11 @@ class PostViewModel : ViewModel() {
         _posts.value = listOf()
 
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val account = Service.api.login("hello", "world")
-                logV(account.apiKey ?: "")
-                account.apiKey?.let { getUsers(it) }
-            } catch (t: Throwable) {
+            runCatching {
+                Service.api.login("hello", "world")
+            }.onSuccess { response ->
+                response.apiKey?.let { key -> getUsers(key) }
+            }.onFailure { t ->
                 logE(t)
             }
         }
@@ -34,8 +33,13 @@ class PostViewModel : ViewModel() {
 
     private fun getUsers(apiKey: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val users = Service.api.getUsers(apiKey)
-            users.forEach { user -> getPosts(apiKey, user.toUiModel()) }
+            runCatching {
+                Service.api.getUsers(apiKey)
+            }.onSuccess { users ->
+                users.forEach { user -> getPosts(apiKey, user.toUiModel()) }
+            }.onFailure { t ->
+                logE(t)
+            }
         }
     }
 
