@@ -23,12 +23,23 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
+        setListeners()
         setUpObservers()
+    }
+
+    private fun setListeners() {
+        with(binding) {
+            swipeLayout.setOnRefreshListener {
+                viewModel.getApiKey()
+                binding.swipeLayout.isRefreshing = false
+            }
+        }
     }
 
     private fun setUpObservers() {
         viewModel.posts.observe(viewLifecycleOwner, { posts ->
             postAdapter.submitList(posts)
+            binding.swipeLayout.isRefreshing = false
         })
     }
 

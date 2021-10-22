@@ -19,7 +19,10 @@ class PostViewModel : ViewModel() {
 
     init {
         _posts.value = listOf()
+        getApiKey()
+    }
 
+    fun getApiKey() {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 Service.api.login("hello", "world")
