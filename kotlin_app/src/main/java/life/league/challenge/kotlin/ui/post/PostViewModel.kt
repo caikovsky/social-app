@@ -7,6 +7,7 @@ import life.league.challenge.kotlin.data.api.Service
 import life.league.challenge.kotlin.data.api.getPosts
 import life.league.challenge.kotlin.data.api.getUsers
 import life.league.challenge.kotlin.data.api.login
+import life.league.challenge.kotlin.ui.model.Post
 import life.league.challenge.kotlin.ui.model.User
 import life.league.challenge.kotlin.ui.model.toUiModel
 import life.league.challenge.kotlin.util.logE
@@ -14,10 +15,12 @@ import life.league.challenge.kotlin.util.logV
 
 class PostViewModel : ViewModel() {
 
-    private var _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> get() = _users
+    private var _posts = MutableLiveData<List<Post>>()
+    val posts: LiveData<List<Post>> get() = _posts
 
     init {
+        _posts.value = listOf()
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val account = Service.api.login("hello", "world")
@@ -30,23 +33,24 @@ class PostViewModel : ViewModel() {
     }
 
     private fun getUsers(apiKey: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val users = Service.api.getUsers(apiKey)
-
-            _users.value = users.map { user ->
-                getPosts(apiKey, user.id)
-                user.toUiModel()
-            }
+            users.forEach { user -> getPosts(apiKey, user.toUiModel()) }
         }
-
     }
 
-    private fun getPosts(apiKey: String, userId: Int) {
+    private fun getPosts(apiKey: String, user: User) {
         viewModelScope.launch {
-            val posts = Service.api.getPosts(apiKey, userId)
-            logV(posts.toString())
+            runCatching {
+                Service.api.getPosts(apiKey, user.id)
+            }.onSuccess { posts ->
+                val lastPost = posts.last()
+                val post = Post(user, lastPost.id, lastPost.title, lastPost.body)
+                _posts.value = _posts.value?.plus(post)
+            }.onFailure { throwable ->
+                logE(throwable)
+            }
         }
-
     }
 }
 

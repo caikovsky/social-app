@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import life.league.challenge.kotlin.databinding.ItemPostBinding
-import life.league.challenge.kotlin.ui.model.User
+import life.league.challenge.kotlin.ui.model.Post
 
-class PostAdapter : ListAdapter<User, PostAdapter.ListViewHolder>(DIFF_CALLBACK) {
+class PostAdapter : ListAdapter<Post, PostAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<User>() {
-            override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
-                return oldItem.id == newItem.id
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Post>() {
+            override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+                return oldItem.postId == newItem.postId
             }
 
-            override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+            override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
                 return oldItem == newItem
             }
         }
@@ -36,12 +36,12 @@ class PostAdapter : ListAdapter<User, PostAdapter.ListViewHolder>(DIFF_CALLBACK)
     class ListViewHolder(
         private val itemBinding: ItemPostBinding
     ) : RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(user: User) {
+        fun bind(post: Post) {
             itemBinding.run {
-                userThumbnail.load(user.thumbnail) {
-                    transformations(CircleCropTransformation())
-                }
-                userName.text = user.name
+                userThumbnail.load(post.user.thumbnail) { transformations(CircleCropTransformation()) }
+                userName.text = post.user.name
+                postTitle.text = post.title
+                postBody.text = post.body
             }
         }
     }

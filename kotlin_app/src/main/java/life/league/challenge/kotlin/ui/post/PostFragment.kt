@@ -27,8 +27,8 @@ class PostFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        viewModel.users.observe(viewLifecycleOwner, { users ->
-            postAdapter.submitList(users)
+        viewModel.posts.observe(viewLifecycleOwner, { posts ->
+            postAdapter.submitList(posts)
         })
     }
 
