@@ -6,13 +6,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp">
+        android:layout_marginTop="10dp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/user_thumbnail"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="rand" />
@@ -22,13 +21,50 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:maxLines="2"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/user_thumbnail"
             app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
             app:layout_constraintStart_toEndOf="@+id/user_thumbnail"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="User name" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/post_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/user_thumbnail"
+            tools:text="A very very very very very very very veeery very very long post title" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/post_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/post_title"
+            tools:text="Post body" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/light_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/post_body" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_vertical_guideline"
