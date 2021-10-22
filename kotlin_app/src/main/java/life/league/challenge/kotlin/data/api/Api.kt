@@ -23,7 +23,7 @@ interface Api {
     @GET("posts")
     suspend fun posts(
         @Header("x-access-token") accessToken: String,
-        @Query("id") userId: Int
+        @Query("userId") userId: Int
     ): List<PostResponse>
 
 }
