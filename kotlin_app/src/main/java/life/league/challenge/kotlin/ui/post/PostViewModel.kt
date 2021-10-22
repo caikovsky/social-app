@@ -51,8 +51,8 @@ class PostViewModel : ViewModel() {
                 val lastPost = posts.last()
                 val post = Post(user, lastPost.id, lastPost.title, lastPost.body)
                 _posts.value = _posts.value?.plus(post)
-            }.onFailure { throwable ->
-                logE(throwable)
+            }.onFailure { t ->
+                logE(t)
             }
         }
     }
