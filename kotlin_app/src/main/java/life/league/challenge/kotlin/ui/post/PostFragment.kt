@@ -41,6 +41,24 @@ class PostFragment : Fragment() {
             postAdapter.submitList(posts)
             binding.swipeLayout.isRefreshing = false
         })
+
+        viewModel.loading.observe(viewLifecycleOwner, { show ->
+            if (show) {
+                showProgressDialog()
+            } else {
+                hideProgressDialog()
+            }
+        })
+    }
+
+    private fun showProgressDialog() {
+        binding.loading.visibility = View.VISIBLE
+        binding.recyclerView.visibility = View.GONE
+    }
+
+    private fun hideProgressDialog() {
+        binding.loading.visibility = View.GONE
+        binding.recyclerView.visibility = View.VISIBLE
     }
 
     private fun setUpRecyclerView() {

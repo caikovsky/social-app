@@ -1,6 +1,7 @@
 package life.league.challenge.kotlin.ui.post
 
 import androidx.lifecycle.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.data.api.Service
@@ -17,8 +18,12 @@ class PostViewModel : ViewModel() {
     private var _posts = MutableLiveData<List<Post>>()
     val posts: LiveData<List<Post>> get() = _posts
 
+    private var _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> get() = _loading
+
     init {
         _posts.value = listOf()
+        _loading.value = true
         getApiKey()
     }
 
@@ -29,7 +34,7 @@ class PostViewModel : ViewModel() {
             }.onSuccess { response ->
                 response.apiKey?.let { key -> getUsers(key) }
             }.onFailure { t ->
-                logE(t)
+                handleFailure(t)
             }
         }
     }
@@ -41,7 +46,7 @@ class PostViewModel : ViewModel() {
             }.onSuccess { users ->
                 users.forEach { user -> getPosts(apiKey, user.toUiModel()) }
             }.onFailure { t ->
-                logE(t)
+                handleFailure(t)
             }
         }
     }
@@ -54,10 +59,16 @@ class PostViewModel : ViewModel() {
                 val lastPost = posts.last()
                 val post = Post(user, lastPost.id, lastPost.title, lastPost.body)
                 _posts.value = _posts.value?.plus(post)
+                _loading.value = false
             }.onFailure { t ->
-                logE(t)
+                handleFailure(t)
             }
         }
+    }
+
+    private fun CoroutineScope.handleFailure(t: Throwable) {
+        _loading.value = false
+        logE(t)
     }
 }
 
