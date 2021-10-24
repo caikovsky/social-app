@@ -14,29 +14,21 @@ import javax.inject.Inject
 @HiltViewModel
 class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPerUserUseCase) : ViewModel() {
 
-    sealed class State {
-        object Loading : State()
-        object Error : State()
-        data class Content(val posts: List<Post>) : State()
-    }
-
-    sealed class UiEvent {
-        object Initialize : UiEvent()
-        object Refresh : UiEvent()
-    }
-
-    private var _stateLiveData = MutableStateFlow<State>(State.Loading)
-    val stateLiveData: StateFlow<State> get() = _stateLiveData
+    private var _state = MutableStateFlow<State>(State.Loading)
+    val state: StateFlow<State> get() = _state
 
     fun onEvent(uiEvent: UiEvent) {
         when (uiEvent) {
             is UiEvent.Initialize, UiEvent.Refresh -> {
                 viewModelScope.launch {
-                    _stateLiveData.emit(State.Loading)
+                    _state.emit(State.Loading)
 
-                    val posts = getPostsPerUser()
-
-                    _stateLiveData.emit(State.Content(posts))
+                    try {
+                        val posts = getPostsPerUser()
+                        _state.emit(State.Content(posts))
+                    } catch (e: Exception) {
+                        _state.emit(State.Error)
+                    }
                 }
             }
         }
@@ -46,5 +38,16 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
         return postsPerUserUseCase("", "").map {
             it.toViewEntity()
         }
+    }
+
+    sealed class State {
+        object Loading : State()
+        object Error : State()
+        data class Content(val posts: List<Post>) : State()
+    }
+
+    sealed class UiEvent {
+        object Initialize : UiEvent()
+        object Refresh : UiEvent()
     }
 }

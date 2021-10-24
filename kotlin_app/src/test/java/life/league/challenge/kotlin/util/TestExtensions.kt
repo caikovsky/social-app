@@ -1,7 +1,8 @@
-package life.league.challenge.kotlin.api
+package life.league.challenge.kotlin.util
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.junit.Assert
 import java.io.FileNotFoundException
 import java.net.URL
 
@@ -17,3 +18,5 @@ inline fun <reified T> parse(gson: Gson, path: String): T {
 }
 
 inline fun <reified T> Gson.parseFrom(path: String): T = parse(this, path)
+
+infix fun Any.shouldBe(expected: Any) = Assert.assertEquals(expected, this)

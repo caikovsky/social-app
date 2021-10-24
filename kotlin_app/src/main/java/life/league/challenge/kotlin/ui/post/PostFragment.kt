@@ -44,7 +44,7 @@ class PostFragment : Fragment() {
 
     private fun setUpObservers() {
         lifecycleScope.launchWhenStarted {
-            viewModel.stateLiveData.collect { state ->
+            viewModel.state.collect { state ->
                 when (state) {
                     is State.Loading -> showProgressDialog()
                     is State.Error -> hideProgressDialog()

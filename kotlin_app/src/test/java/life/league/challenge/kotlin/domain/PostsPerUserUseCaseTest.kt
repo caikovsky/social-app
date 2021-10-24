@@ -9,8 +9,8 @@ import life.league.challenge.kotlin.data.model.PostResponse
 import life.league.challenge.kotlin.data.model.UserResponse
 import life.league.challenge.kotlin.util.MainCoroutineRule
 import life.league.challenge.kotlin.util.MockedModelGenerator
+import life.league.challenge.kotlin.util.shouldBe
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -53,7 +53,7 @@ class PostsPerUserUseCaseTest {
 
             val result = postsPerUserUseCase(name, password)
 
-            assertEquals(expected, result)
+            expected shouldBe result
         }
     }
 
@@ -74,7 +74,7 @@ class PostsPerUserUseCaseTest {
 
             val result = postsPerUserUseCase(name, password)
 
-            assertEquals(expected, result)
+            expected shouldBe result
         }
     }
 
