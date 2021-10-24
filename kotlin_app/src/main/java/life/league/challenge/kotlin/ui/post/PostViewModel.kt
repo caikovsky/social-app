@@ -13,33 +13,42 @@ import javax.inject.Inject
 @HiltViewModel
 class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPerUserUseCase) : ViewModel() {
 
-    private var _posts = MutableLiveData<List<Post>>()
-    val posts: LiveData<List<Post>> get() = _posts
-
-    private var _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> get() = _loading
-
-    init {
-        _posts.value = listOf()
-        getPostsPerUser()
+    sealed class State {
+        object Loading : State()
+        object Error : State()
+        data class Content(val posts: List<Post>) : State()
     }
 
-    fun getPostsPerUser() {
-        _loading.value = true
+    sealed class UiEvent {
+        object Initialize : UiEvent()
+        object Refresh : UiEvent()
+    }
 
-        viewModelScope.launch {
-            val postsPerUser = postsPerUserUseCase("", "")
-            _posts.value = postsPerUser.map {
-                Post(
-                    userId = it.userId,
-                    name = it.name,
-                    thumbnail = it.thumbnail,
-                    title = it.posts.last().title,
-                    body = it.posts.last().body
-                )
+    private var _stateLiveData = MutableLiveData<State>()
+    val stateLiveData: LiveData<State> get() = _stateLiveData
+
+    fun onEvent(uiEvent: UiEvent) {
+        when (uiEvent) {
+            is UiEvent.Initialize, UiEvent.Refresh -> {
+                _stateLiveData.value = State.Loading
+
+                viewModelScope.launch {
+                    val posts = getPostsPerUser()
+                    _stateLiveData.value = State.Content(posts)
+                }
             }
+        }
+    }
 
-            _loading.value = false
+    private suspend fun getPostsPerUser(): List<Post> {
+        return postsPerUserUseCase("", "").map {
+            Post(
+                userId = it.userId,
+                name = it.name,
+                thumbnail = it.thumbnail,
+                title = it.posts.last().title,
+                body = it.posts.last().body
+            )
         }
     }
 }

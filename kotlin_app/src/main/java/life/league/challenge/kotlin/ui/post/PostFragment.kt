@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import life.league.challenge.kotlin.databinding.FragmentPostBinding
+import life.league.challenge.kotlin.ui.post.PostViewModel.*
 
 @AndroidEntryPoint
 class PostFragment : Fragment() {
@@ -17,7 +18,8 @@ class PostFragment : Fragment() {
     private val postAdapter = PostAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return FragmentPostBinding.inflate(inflater, container, false).root
+        binding = FragmentPostBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -25,28 +27,27 @@ class PostFragment : Fragment() {
         setUpRecyclerView()
         setListeners()
         setUpObservers()
+        viewModel.onEvent(UiEvent.Initialize)
     }
 
     private fun setListeners() {
         with(binding) {
             swipeLayout.setOnRefreshListener {
-                viewModel.getPostsPerUser()
+                viewModel.onEvent(UiEvent.Refresh)
                 binding.swipeLayout.isRefreshing = false
             }
         }
     }
 
     private fun setUpObservers() {
-        viewModel.posts.observe(viewLifecycleOwner, { posts ->
-            postAdapter.submitList(posts)
-            binding.swipeLayout.isRefreshing = false
-        })
-
-        viewModel.loading.observe(viewLifecycleOwner, { show ->
-            if (show) {
-                showProgressDialog()
-            } else {
-                hideProgressDialog()
+        viewModel.stateLiveData.observe(viewLifecycleOwner, { state ->
+            when (state) {
+                is State.Loading -> showProgressDialog()
+                is State.Error -> hideProgressDialog()
+                is State.Content -> {
+                    hideProgressDialog()
+                    postAdapter.submitList(state.posts)
+                }
             }
         })
     }
