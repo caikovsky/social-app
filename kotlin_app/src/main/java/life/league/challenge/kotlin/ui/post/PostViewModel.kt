@@ -1,19 +1,17 @@
 package life.league.challenge.kotlin.ui.post
 
-import androidx.lifecycle.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import life.league.challenge.kotlin.data.api.Service
-import life.league.challenge.kotlin.data.api.getPosts
-import life.league.challenge.kotlin.data.api.getUsers
-import life.league.challenge.kotlin.data.api.login
+import life.league.challenge.kotlin.domain.PostsPerUserUseCase
 import life.league.challenge.kotlin.ui.model.Post
-import life.league.challenge.kotlin.ui.model.User
-import life.league.challenge.kotlin.ui.model.toUiModel
-import life.league.challenge.kotlin.util.logE
+import javax.inject.Inject
 
-class PostViewModel : ViewModel() {
+@HiltViewModel
+class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPerUserUseCase) : ViewModel() {
 
     private var _posts = MutableLiveData<List<Post>>()
     val posts: LiveData<List<Post>> get() = _posts
@@ -23,55 +21,25 @@ class PostViewModel : ViewModel() {
 
     init {
         _posts.value = listOf()
+        getPostsPerUser()
+    }
+
+    fun getPostsPerUser() {
         _loading.value = true
-        getApiKey()
-    }
 
-    fun getApiKey() {
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching {
-                Service.api.login("hello", "world")
-            }.onSuccess { response ->
-                response.apiKey?.let { key -> getUsers(key) }
-            }.onFailure { t ->
-                handleFailure(t)
-            }
-        }
-    }
-
-    private fun getUsers(apiKey: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching {
-                Service.api.getUsers(apiKey)
-            }.onSuccess { users ->
-                users.forEach { user -> getPosts(apiKey, user.toUiModel()) }
-            }.onFailure { t ->
-                handleFailure(t)
-            }
-        }
-    }
-
-    private fun getPosts(apiKey: String, user: User) {
         viewModelScope.launch {
-            runCatching {
-                Service.api.getPosts(apiKey, user.id)
-            }.onSuccess { posts ->
-                val lastPost = posts.last()
-                val post = Post(user, lastPost.id, lastPost.title, lastPost.body)
-                _posts.value = _posts.value?.plus(post)
-                _loading.value = false
-            }.onFailure { t ->
-                handleFailure(t)
+            val postsPerUser = postsPerUserUseCase("", "")
+            _posts.value = postsPerUser.map {
+                Post(
+                    userId = it.userId,
+                    name = it.name,
+                    thumbnail = it.thumbnail,
+                    title = it.posts.last().title,
+                    body = it.posts.last().body
+                )
             }
+
+            _loading.value = false
         }
     }
-
-    private fun CoroutineScope.handleFailure(t: Throwable) {
-        _loading.value = false
-        logE(t)
-    }
-}
-
-class PostViewModelFactory : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = modelClass.cast(PostViewModel())!!
 }

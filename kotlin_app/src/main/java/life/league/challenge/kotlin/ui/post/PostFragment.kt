@@ -6,17 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import life.league.challenge.kotlin.databinding.FragmentPostBinding
 
+@AndroidEntryPoint
 class PostFragment : Fragment() {
 
-    private var _binding: FragmentPostBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: PostViewModel by viewModels { PostViewModelFactory() }
+    private lateinit var binding: FragmentPostBinding
+    private val viewModel: PostViewModel by viewModels()
     private val postAdapter = PostAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentPostBinding.inflate(inflater, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentPostBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,7 +31,7 @@ class PostFragment : Fragment() {
     private fun setListeners() {
         with(binding) {
             swipeLayout.setOnRefreshListener {
-                viewModel.getApiKey()
+                viewModel.getPostsPerUser()
                 binding.swipeLayout.isRefreshing = false
             }
         }

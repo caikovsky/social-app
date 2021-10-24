@@ -15,7 +15,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ListViewHolder>(DIFF_CALLBACK)
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Post>() {
             override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-                return oldItem.postId == newItem.postId
+                return oldItem.userId == newItem.userId
             }
 
             override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
@@ -38,8 +38,8 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ListViewHolder>(DIFF_CALLBACK)
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(post: Post) {
             itemBinding.run {
-                userThumbnail.load(post.user.thumbnail) { transformations(CircleCropTransformation()) }
-                userName.text = post.user.name
+                userThumbnail.load(post.thumbnail) { transformations(CircleCropTransformation()) }
+                userName.text = post.name
                 postTitle.text = post.title
                 postBody.text = post.body
             }
