@@ -17,8 +17,7 @@ class PostFragment : Fragment() {
     private val postAdapter = PostAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentPostBinding.inflate(inflater, container, false)
-        return binding.root
+        return FragmentPostBinding.inflate(inflater, container, false).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

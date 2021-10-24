@@ -3,6 +3,8 @@ package life.league.challenge.kotlin.domain
 import life.league.challenge.kotlin.data.model.AccountResponse
 import life.league.challenge.kotlin.data.model.PostResponse
 import life.league.challenge.kotlin.data.model.UserResponse
+import life.league.challenge.kotlin.domain.model.PostDomain
+import life.league.challenge.kotlin.domain.model.PostPerUserDomain
 import javax.inject.Inject
 
 class PostsPerUserUseCase @Inject constructor(

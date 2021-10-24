@@ -12,18 +12,6 @@ import life.league.challenge.kotlin.ui.model.Post
 
 class PostAdapter : ListAdapter<Post, PostAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Post>() {
-            override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-                return oldItem.userId == newItem.userId
-            }
-
-            override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val itemBinding = ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ListViewHolder(itemBinding)
@@ -46,4 +34,15 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ListViewHolder>(DIFF_CALLBACK)
         }
     }
 
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Post>() {
+            override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+                return oldItem.userId == newItem.userId
+            }
+
+            override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 }
