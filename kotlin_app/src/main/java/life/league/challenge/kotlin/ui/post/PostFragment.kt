@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import life.league.challenge.kotlin.databinding.FragmentPostBinding
-import life.league.challenge.kotlin.ui.post.PostViewModel.*
+import life.league.challenge.kotlin.ui.post.PostViewModel.State
+import life.league.challenge.kotlin.ui.post.PostViewModel.UiEvent
 
 @AndroidEntryPoint
 class PostFragment : Fragment() {
@@ -40,16 +43,18 @@ class PostFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        viewModel.stateLiveData.observe(viewLifecycleOwner, { state ->
-            when (state) {
-                is State.Loading -> showProgressDialog()
-                is State.Error -> hideProgressDialog()
-                is State.Content -> {
-                    hideProgressDialog()
-                    postAdapter.submitList(state.posts)
+        lifecycleScope.launchWhenStarted {
+            viewModel.stateLiveData.collect { state ->
+                when (state) {
+                    is State.Loading -> showProgressDialog()
+                    is State.Error -> hideProgressDialog()
+                    is State.Content -> {
+                        hideProgressDialog()
+                        postAdapter.submitList(state.posts)
+                    }
                 }
             }
-        })
+        }
     }
 
     private fun showProgressDialog() {

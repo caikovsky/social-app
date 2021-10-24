@@ -1,10 +1,10 @@
 package life.league.challenge.kotlin.ui.post
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.domain.PostsPerUserUseCase
 import life.league.challenge.kotlin.domain.model.toViewEntity
@@ -25,17 +25,18 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
         object Refresh : UiEvent()
     }
 
-    private var _stateLiveData = MutableLiveData<State>()
-    val stateLiveData: LiveData<State> get() = _stateLiveData
+    private var _stateLiveData = MutableStateFlow<State>(State.Loading)
+    val stateLiveData: StateFlow<State> get() = _stateLiveData
 
     fun onEvent(uiEvent: UiEvent) {
         when (uiEvent) {
             is UiEvent.Initialize, UiEvent.Refresh -> {
-                _stateLiveData.value = State.Loading
-
                 viewModelScope.launch {
+                    _stateLiveData.emit(State.Loading)
+
                     val posts = getPostsPerUser()
-                    _stateLiveData.value = State.Content(posts)
+
+                    _stateLiveData.emit(State.Content(posts))
                 }
             }
         }
