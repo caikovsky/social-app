@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.domain.PostsPerUserUseCase
+import life.league.challenge.kotlin.domain.model.toViewEntity
 import life.league.challenge.kotlin.ui.model.Post
 import javax.inject.Inject
 
@@ -42,13 +43,7 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
 
     private suspend fun getPostsPerUser(): List<Post> {
         return postsPerUserUseCase("", "").map {
-            Post(
-                userId = it.userId,
-                name = it.name,
-                thumbnail = it.thumbnail,
-                title = it.posts.last().title,
-                body = it.posts.last().body
-            )
+            it.toViewEntity()
         }
     }
 }
