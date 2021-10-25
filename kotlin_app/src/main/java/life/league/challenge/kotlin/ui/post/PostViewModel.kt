@@ -1,5 +1,6 @@
 package life.league.challenge.kotlin.ui.post
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -7,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.domain.PostsPerUserUseCase
-import life.league.challenge.kotlin.domain.model.toViewEntity
+import life.league.challenge.kotlin.domain.model.PostPerUserDomain
 import life.league.challenge.kotlin.ui.model.Post
 import javax.inject.Inject
 
@@ -19,25 +20,32 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
 
     fun onEvent(uiEvent: UiEvent) {
         when (uiEvent) {
-            is UiEvent.Initialize, UiEvent.Refresh -> {
-                viewModelScope.launch {
-                    _state.emit(State.Loading)
+            is UiEvent.Initialize, UiEvent.Refresh -> getPostsPerUser()
+        }
+    }
 
-                    try {
-                        val posts = getPostsPerUser()
-                        _state.emit(State.Content(posts))
-                    } catch (e: Exception) {
-                        _state.emit(State.Error)
-                    }
-                }
+    private fun getPostsPerUser() {
+        viewModelScope.launch {
+            _state.emit(State.Loading)
+
+            try {
+                val posts = postsPerUserUseCase().toViewEntities()
+                _state.emit(State.Content(posts))
+            } catch (e: Exception) {
+                Log.e(this::class.simpleName, "onEvent: ${e.message}")
+                _state.emit(State.Error)
             }
         }
     }
 
-    private suspend fun getPostsPerUser(): List<Post> {
-        return postsPerUserUseCase("", "").map {
-            it.toViewEntity()
-        }
+    private fun List<PostPerUserDomain>.toViewEntities() = map { domain ->
+        Post(
+            userId = domain.userId,
+            name = domain.name,
+            thumbnail = domain.thumbnail,
+            title = domain.posts.last().title,
+            body = domain.posts.last().body
+        )
     }
 
     sealed class State {
