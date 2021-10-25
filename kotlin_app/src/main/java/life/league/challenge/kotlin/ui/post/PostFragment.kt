@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -46,25 +47,17 @@ class PostFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.state.collect { state ->
                 when (state) {
-                    is State.Loading -> showProgressDialog()
-                    is State.Error -> hideProgressDialog()
-                    is State.Content -> {
-                        hideProgressDialog()
-                        postAdapter.submitList(state.posts)
-                    }
+                    is State.Loading -> setVisibility(isLoadingShown = true)
+                    is State.Error -> setVisibility(isErrorShown = true)
+                    is State.Content -> handleContent(state)
                 }
             }
         }
     }
 
-    private fun showProgressDialog() {
-        binding.loading.visibility = View.VISIBLE
-        binding.recyclerView.visibility = View.GONE
-    }
-
-    private fun hideProgressDialog() {
-        binding.loading.visibility = View.GONE
-        binding.recyclerView.visibility = View.VISIBLE
+    private fun handleContent(state: State.Content) {
+        setVisibility(isContentShown = true)
+        postAdapter.submitList(state.posts)
     }
 
     private fun setUpRecyclerView() {
@@ -72,5 +65,15 @@ class PostFragment : Fragment() {
             setHasFixedSize(true)
             adapter = postAdapter
         }
+    }
+
+    private fun setVisibility(
+        isContentShown: Boolean = false,
+        isErrorShown: Boolean = false,
+        isLoadingShown: Boolean = false,
+    ) {
+        binding.recyclerView.isVisible = isContentShown
+        binding.loading.isVisible = isLoadingShown
+//        binding.error.isVisible = isErrorShown
     }
 }
