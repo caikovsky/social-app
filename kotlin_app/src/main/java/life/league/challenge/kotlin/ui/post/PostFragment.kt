@@ -31,7 +31,8 @@ class PostFragment : Fragment() {
         setUpRecyclerView()
         setListeners()
         setUpObservers()
-        viewModel.onEvent(UiEvent.Initialize)
+
+        if (savedInstanceState == null) viewModel.onEvent(UiEvent.Initialize)
     }
 
     private fun setListeners() {
