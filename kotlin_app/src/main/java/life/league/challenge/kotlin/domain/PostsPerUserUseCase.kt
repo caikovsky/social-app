@@ -1,10 +1,11 @@
 package life.league.challenge.kotlin.domain
 
-import life.league.challenge.kotlin.data.model.AccountResponse
-import life.league.challenge.kotlin.data.model.PostResponse
-import life.league.challenge.kotlin.data.model.UserResponse
 import life.league.challenge.kotlin.domain.model.PostDomain
 import life.league.challenge.kotlin.domain.model.PostPerUserDomain
+import life.league.challenge.kotlin.domain.model.UserDomain
+import life.league.challenge.kotlin.domain.repositories.LoginRepository
+import life.league.challenge.kotlin.domain.repositories.PostRepository
+import life.league.challenge.kotlin.domain.repositories.UserRepository
 import javax.inject.Inject
 
 class PostsPerUserUseCase @Inject constructor(
@@ -12,40 +13,29 @@ class PostsPerUserUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val postRepository: PostRepository,
 ) {
-    suspend operator fun invoke(name: String, password: String): List<PostPerUserDomain> {
+    suspend operator fun invoke(name: String = "", password: String = ""): List<PostPerUserDomain> {
         val token = loginRepository(name, password)
-        val users = userRepository(token.apiKey ?: "")
+        val users = userRepository(token.apiKey)
 
-        val postsPerUser = mutableMapOf<UserResponse, List<PostDomain>>()
+        val postsPerUserMap = mutableMapOf<UserDomain, List<PostDomain>>()
 
         for (user in users) {
-            val posts = postRepository(token.apiKey ?: "", user.id)
-                .map {
-                    PostDomain(id = it.id, title = it.title, body = it.body)
-                }.sortedBy { it.id }
-
-            postsPerUser[user] = posts
+            val posts = postRepository(token.apiKey, user.id).sortedBy { it.id }
+            postsPerUserMap[user] = posts
         }
 
-        return postsPerUser.map { map ->
+        return postsPerUserMap.map { entry ->
             PostPerUserDomain(
-                userId = map.key.id,
-                name = map.key.name,
-                thumbnail = map.key.avatar.thumbnail,
-                posts = map.value
+                userId = entry.key.id,
+                name = entry.key.name,
+                thumbnail = entry.key.thumbnail,
+                posts = entry.value
             )
         }
     }
 }
 
-interface LoginRepository {
-    suspend operator fun invoke(username: String, password: String): AccountResponse
-}
 
-interface UserRepository {
-    suspend operator fun invoke(apiKey: String): List<UserResponse>
-}
 
-interface PostRepository {
-    suspend operator fun invoke(apiKey: String, userId: Int): List<PostResponse>
-}
+
+
