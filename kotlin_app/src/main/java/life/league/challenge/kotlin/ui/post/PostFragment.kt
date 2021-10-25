@@ -75,6 +75,6 @@ class PostFragment : Fragment() {
     ) {
         binding.recyclerView.isVisible = isContentShown
         binding.loading.isVisible = isLoadingShown
-//        binding.error.isVisible = isErrorShown
+        binding.error.isVisible = isErrorShown
     }
 }
