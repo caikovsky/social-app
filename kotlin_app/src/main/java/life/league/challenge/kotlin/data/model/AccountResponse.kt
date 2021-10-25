@@ -1,8 +1,10 @@
 package life.league.challenge.kotlin.data.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AccountResponse(
-    @SerializedName("api_key")
-    val apiKey: String? = null
+    @SerialName("api_key")
+    val apiKey: String,
 )

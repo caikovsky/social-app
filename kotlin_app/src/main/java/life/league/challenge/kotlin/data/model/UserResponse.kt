@@ -1,40 +1,46 @@
 package life.league.challenge.kotlin.data.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class UserResponse(
-    @SerializedName("id") val id: Int,
-    @SerializedName("avatar") val avatar: AvatarResponse,
-    @SerializedName("name") val name: String,
-    @SerializedName("username") val username: String,
-    @SerializedName("email") val email: String,
-    @SerializedName("address") val address: AddressResponse,
-    @SerializedName("phone") val phone: String,
-    @SerializedName("website") val website: String,
-    @SerializedName("company") val company: CompanyResponse
-)
+    val id: Int,
+    val avatar: AvatarResponse,
+    val name: String,
+    val username: String,
+    val email: String,
+    val address: AddressResponse,
+    val phone: String,
+    val website: String,
+    val company: CompanyResponse,
+) {
+    @Serializable
+    data class AvatarResponse(
+        val large: String,
+        val medium: String,
+        val thumbnail: String,
+    )
 
-data class AvatarResponse(
-    @SerializedName("large") val large: String,
-    @SerializedName("medium") val medium: String,
-    @SerializedName("thumbnail") val thumbnail: String
-)
+    @Serializable
+    data class AddressResponse(
+        val street: String,
+        val suite: String,
+        val city: String,
+        val zipcode: String,
+        val geo: GeoResponse,
+    )
 
-data class AddressResponse(
-    @SerializedName("street") val street: String,
-    @SerializedName("suite") val suite: String,
-    @SerializedName("city") val city: String,
-    @SerializedName("zipcode") val zipcode: String,
-    @SerializedName("geo") val geoResponse: GeoResponse
-)
+    @Serializable
+    data class CompanyResponse(
+        val name: String,
+        val catchPhrase: String,
+        val bs: String,
+    )
 
-data class CompanyResponse(
-    @SerializedName("name") val name: String,
-    @SerializedName("catchPhrase") val catchPhrase: String,
-    @SerializedName("bs") val bs: String
-)
+    @Serializable
+    data class GeoResponse(
+        val lat: Double,
+        val lng: Double,
+    )
+}
 
-data class GeoResponse(
-    @SerializedName("lat") val lat: Double,
-    @SerializedName("lng") val lng: Double
-)

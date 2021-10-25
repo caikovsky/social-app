@@ -9,11 +9,3 @@ data class PostPerUserDomain(
     val posts: List<PostDomain>,
 )
 
-fun PostPerUserDomain.toViewEntity() =
-    Post(
-        userId = this.userId,
-        name = this.name,
-        thumbnail = this.thumbnail,
-        title = this.posts.last().title,
-        body = this.posts.last().body
-    )

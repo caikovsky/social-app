@@ -8,9 +8,9 @@ import life.league.challenge.kotlin.data.api.Api
 import life.league.challenge.kotlin.data.repositories.LoginRepositoryImpl
 import life.league.challenge.kotlin.data.repositories.PostRepositoryImpl
 import life.league.challenge.kotlin.data.repositories.UserRepositoryImpl
-import life.league.challenge.kotlin.domain.LoginRepository
-import life.league.challenge.kotlin.domain.PostRepository
-import life.league.challenge.kotlin.domain.UserRepository
+import life.league.challenge.kotlin.domain.repositories.LoginRepository
+import life.league.challenge.kotlin.domain.repositories.PostRepository
+import life.league.challenge.kotlin.domain.repositories.UserRepository
 
 @Module
 @InstallIn(ViewModelComponent::class)
