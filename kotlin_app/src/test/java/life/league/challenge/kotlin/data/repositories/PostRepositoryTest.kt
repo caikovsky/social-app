@@ -5,8 +5,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import life.league.challenge.kotlin.data.api.Api
-import life.league.challenge.kotlin.data.model.AccountResponse
-import life.league.challenge.kotlin.data.model.UserResponse
+import life.league.challenge.kotlin.data.model.remote.AccountResponse
+import life.league.challenge.kotlin.data.model.remote.UserResponse
 import life.league.challenge.kotlin.domain.model.PostDomain
 import life.league.challenge.kotlin.util.readFile
 import life.league.challenge.kotlin.util.shouldBe

@@ -5,8 +5,6 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import life.league.challenge.kotlin.data.model.PostResponse
-import life.league.challenge.kotlin.data.model.UserResponse
 import life.league.challenge.kotlin.domain.repositories.LoginRepository
 import life.league.challenge.kotlin.domain.repositories.PostRepository
 import life.league.challenge.kotlin.domain.repositories.UserRepository
@@ -14,7 +12,6 @@ import life.league.challenge.kotlin.util.MainCoroutineRule
 import life.league.challenge.kotlin.util.MockedModelGenerator
 import life.league.challenge.kotlin.util.shouldBe
 import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 

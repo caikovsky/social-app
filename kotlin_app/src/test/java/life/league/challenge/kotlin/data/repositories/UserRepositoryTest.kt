@@ -1,15 +1,11 @@
 package life.league.challenge.kotlin.data.repositories
 
-import android.util.Base64
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import io.mockk.every
-import io.mockk.mockkStatic
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import life.league.challenge.kotlin.data.api.Api
-import life.league.challenge.kotlin.data.model.AccountResponse
-import life.league.challenge.kotlin.domain.model.AccountDomain
+import life.league.challenge.kotlin.data.model.remote.AccountResponse
 import life.league.challenge.kotlin.domain.model.UserDomain
 import life.league.challenge.kotlin.util.readFile
 import life.league.challenge.kotlin.util.shouldBe

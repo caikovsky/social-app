@@ -5,6 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import life.league.challenge.kotlin.data.api.Api
+import life.league.challenge.kotlin.data.database.dao.PostDao
+import life.league.challenge.kotlin.data.database.dao.UserDao
 import life.league.challenge.kotlin.data.repositories.LoginRepositoryImpl
 import life.league.challenge.kotlin.data.repositories.PostRepositoryImpl
 import life.league.challenge.kotlin.data.repositories.UserRepositoryImpl
@@ -20,8 +22,8 @@ object DomainModule {
     fun provideLoginRepository(service: Api): LoginRepository = LoginRepositoryImpl(service)
 
     @Provides
-    fun provideUserRepository(service: Api): UserRepository = UserRepositoryImpl(service)
+    fun provideUserRepository(service: Api, dao: UserDao): UserRepository = UserRepositoryImpl(service, dao)
 
     @Provides
-    fun providePostRepository(service: Api): PostRepository = PostRepositoryImpl(service)
+    fun providePostRepository(service: Api, dao: PostDao): PostRepository = PostRepositoryImpl(service, dao)
 }

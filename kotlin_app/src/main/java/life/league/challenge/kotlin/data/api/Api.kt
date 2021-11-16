@@ -1,8 +1,8 @@
 package life.league.challenge.kotlin.data.api
 
-import life.league.challenge.kotlin.data.model.AccountResponse
-import life.league.challenge.kotlin.data.model.PostResponse
-import life.league.challenge.kotlin.data.model.UserResponse
+import life.league.challenge.kotlin.data.model.remote.AccountResponse
+import life.league.challenge.kotlin.data.model.remote.PostResponse
+import life.league.challenge.kotlin.data.model.remote.UserResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query

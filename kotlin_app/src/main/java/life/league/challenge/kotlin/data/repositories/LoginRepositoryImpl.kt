@@ -2,7 +2,7 @@ package life.league.challenge.kotlin.data.repositories
 
 import android.util.Base64
 import life.league.challenge.kotlin.data.api.Api
-import life.league.challenge.kotlin.data.model.AccountResponse
+import life.league.challenge.kotlin.data.model.remote.AccountResponse
 import life.league.challenge.kotlin.domain.model.AccountDomain
 import life.league.challenge.kotlin.domain.repositories.LoginRepository
 import javax.inject.Inject
