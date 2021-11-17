@@ -21,21 +21,9 @@ import org.junit.Test
 import retrofit2.Retrofit
 
 @ExperimentalSerializationApi
-class LoginRepositoryTest {
+class LoginRepositoryTest : BaseRepositoryTest() {
 
-    private val server = MockWebServer()
-    private val service = Retrofit.Builder()
-        .baseUrl(server.url(""))
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-        .client(OkHttpClient.Builder().build())
-        .build()
-        .create(Api::class.java)
     private val loginRepository = LoginRepositoryImpl(service)
-
-    @After
-    fun tearDown() {
-        server.shutdown()
-    }
 
     @Test
     fun `should hit login endpoint on the API with any username or password and return a apiKey`() = runBlocking {
