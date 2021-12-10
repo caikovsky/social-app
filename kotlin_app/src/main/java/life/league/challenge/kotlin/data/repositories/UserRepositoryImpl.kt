@@ -2,27 +2,17 @@ package life.league.challenge.kotlin.data.repositories
 
 import life.league.challenge.kotlin.data.api.Api
 import life.league.challenge.kotlin.data.database.dao.UserDao
-import life.league.challenge.kotlin.data.model.remote.UserResponse
 import life.league.challenge.kotlin.data.model.local.UserEntity
+import life.league.challenge.kotlin.data.model.remote.UserResponse
 import life.league.challenge.kotlin.domain.model.UserDomain
 import life.league.challenge.kotlin.domain.repositories.UserRepository
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private val api: Api, private val userDao: UserDao) : UserRepository {
     override suspend fun invoke(apiKey: String): List<UserDomain> {
-        val daoResult = userDao.getAllUsers()
-
-        return if (daoResult.isNullOrEmpty()) {
-            val apiResult = api.users(accessToken = apiKey)
-
-            for (user in apiResult) {
-                userDao.insertUser(user.toEntity())
-            }
-
-            apiResult.toDomain()
-        } else {
-            daoResult.toDomain()
-        }
+        val apiResult = api.users(accessToken = apiKey)
+        return apiResult.toDomain()
+        TODO("Redo cache logic")
     }
 
     @JvmName("toDomainUserEntity")

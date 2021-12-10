@@ -40,7 +40,7 @@ class PostsPerUserUseCaseTest {
         val posts = listOf(MockedModelGenerator.getPostDomain())
 
         mainCoroutineRule.runBlockingTest {
-            val expected = MockedModelGenerator.getPostPerUserDomainList()
+            val expected = listOf(MockedModelGenerator.getPostPerUserDomain())
 
             coEvery { loginRepository(name, password) } returns token
             coEvery { userRepository(token.apiKey) } returns users

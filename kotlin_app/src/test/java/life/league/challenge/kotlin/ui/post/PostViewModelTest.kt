@@ -31,7 +31,7 @@ class PostViewModelTest {
     @Test
     fun `successfully retrieve the posts per user when initialize event is triggered`() {
         mainCoroutineRule.runBlockingTest {
-            val useCaseResponse = MockedModelGenerator.getPostPerUserDomainList()
+            val useCaseResponse = listOf(MockedModelGenerator.getPostPerUserDomain())
 
             coEvery { postsPerUserUseCase(any() as String, any() as String) } returns useCaseResponse
 
@@ -49,7 +49,7 @@ class PostViewModelTest {
     @Test
     fun `successfully retrieve the posts per user when refresh event is triggered`() {
         mainCoroutineRule.runBlockingTest {
-            val useCaseResponse = MockedModelGenerator.getPostPerUserDomainList()
+            val useCaseResponse = listOf(MockedModelGenerator.getPostPerUserDomain())
 
             coEvery { postsPerUserUseCase(any() as String, any() as String) } returns useCaseResponse
 

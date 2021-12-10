@@ -2,28 +2,17 @@ package life.league.challenge.kotlin.data.repositories
 
 import life.league.challenge.kotlin.data.api.Api
 import life.league.challenge.kotlin.data.database.dao.PostDao
-import life.league.challenge.kotlin.data.model.remote.PostResponse
 import life.league.challenge.kotlin.data.model.local.PostEntity
+import life.league.challenge.kotlin.data.model.remote.PostResponse
 import life.league.challenge.kotlin.domain.model.PostDomain
 import life.league.challenge.kotlin.domain.repositories.PostRepository
 import javax.inject.Inject
 
 class PostRepositoryImpl @Inject constructor(private val api: Api, private val postDao: PostDao) : PostRepository {
     override suspend fun invoke(apiKey: String, userId: Int): List<PostDomain> {
-        val daoResult = postDao.getAllPostsFromUser(userId)
-
-        return if (daoResult.isNullOrEmpty()) {
-            val apiResult = api.posts(accessToken = apiKey, userId = userId)
-
-            for (post in apiResult) {
-                postDao.insertPost(post.toEntity())
-            }
-
-            apiResult.toDomain()
-        } else {
-            daoResult.toDomain()
-        }
-
+        val apiResult = api.posts(accessToken = apiKey, userId = userId)
+        return apiResult.toDomain()
+        TODO("Redo cache logic")
     }
 
     @JvmName("toDomainPostResponse")

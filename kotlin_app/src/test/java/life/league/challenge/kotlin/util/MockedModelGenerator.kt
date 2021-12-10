@@ -44,8 +44,6 @@ object MockedModelGenerator {
         posts = posts
     )
 
-    fun getPostPerUserDomainList(): List<PostPerUserDomain> = listOf(getPostPerUserDomain())
-
     fun getPost(): Post = Post(
         userId = 1,
         name = "John Doe",

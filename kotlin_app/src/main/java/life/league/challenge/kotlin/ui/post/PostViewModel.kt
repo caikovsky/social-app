@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.domain.PostsPerUserUseCase
 import life.league.challenge.kotlin.domain.model.PostPerUserDomain
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPerUserUseCase) : ViewModel() {
 
     private var _state = MutableStateFlow<State>(State.Loading)
-    val state: StateFlow<State> get() = _state
+    val state = _state.asStateFlow()
 
     fun onEvent(uiEvent: UiEvent) {
         when (uiEvent) {
@@ -24,18 +24,16 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
         }
     }
 
-    private fun getPostsPerUser() {
-        viewModelScope.launch {
-            _state.emit(State.Loading)
+    private fun getPostsPerUser() = viewModelScope.launch {
+        _state.emit(State.Loading)
 
-            try {
-                val posts = postsPerUserUseCase().toViewEntities()
+        runCatching { postsPerUserUseCase().toViewEntities() }
+            .onSuccess { posts ->
                 _state.emit(State.Content(posts))
-            } catch (e: Exception) {
-                Log.e(this::class.simpleName, "onEvent: ${e.message}")
+            }.onFailure { throwable ->
+                Log.e(this::class.simpleName, "onEvent: ${throwable.message}")
                 _state.emit(State.Error)
             }
-        }
     }
 
     private fun List<PostPerUserDomain>.toViewEntities() = map { domain ->
