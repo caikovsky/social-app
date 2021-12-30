@@ -6,13 +6,13 @@ apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-serialization'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "life.league.challenge.kotlin"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -26,8 +26,9 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding true
+        compose true
     }
 
     compileOptions {
@@ -38,16 +39,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-
+    
     packagingOptions {
         exclude 'META-INF/AL2.0'
         exclude 'META-INF/LGPL2.1'
     }
 
-    packagingOptions {
-        exclude 'META-INF/AL2.0'
-        exclude 'META-INF/LGPL2.1'
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.5'
     }
 
 }
@@ -61,14 +60,26 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:2.38.1"
     kaptTest "com.google.dagger:hilt-compiler:2.38.1"
 
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'androidx.fragment:fragment-ktx:1.3.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
-    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation "io.coil-kt:coil:1.4.0"
+
+    // Compose
+    implementation "androidx.compose.runtime:runtime:$rootProject.compose_version"
+    implementation "androidx.compose.ui:ui:$rootProject.compose_version"
+    implementation "androidx.compose.foundation:foundation:$rootProject.compose_version"
+    implementation "androidx.compose.foundation:foundation-layout:$rootProject.compose_version"
+    implementation "androidx.compose.material:material:$rootProject.compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$rootProject.compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$rootProject.compose_version"
+    implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation "io.coil-kt:coil-compose:1.4.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0"
+    implementation "androidx.navigation:navigation-compose:2.4.0-rc01"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0-rc01"
+    implementation "androidx.compose.material:material-icons-extended:$rootProject.compose_version"
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
