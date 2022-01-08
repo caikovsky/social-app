@@ -16,7 +16,7 @@ import javax.inject.Inject
 class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPerUserUseCase) :
     ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    private val _uiState = MutableStateFlow(UiState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
     fun onEvent(uiEvent: UiEvent) {
@@ -26,14 +26,14 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
     }
 
     private fun getPostsPerUser() = viewModelScope.launch {
-        _uiState.emit(UiState.Loading)
+        _uiState.emit(UiState(isLoading = true))
 
         runCatching { postsPerUserUseCase().toViewEntities() }
             .onSuccess { posts ->
-                _uiState.emit(UiState.Success(posts = posts))
+                _uiState.emit(UiState(posts = posts))
             }.onFailure { throwable ->
                 Log.e(this::class.simpleName, "onEvent: ${throwable.message}")
-                _uiState.emit(UiState.Error)
+                _uiState.emit(UiState(errorMessage = throwable.message))
             }
     }
 
@@ -48,11 +48,11 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
     }
 }
 
-sealed class UiState {
-    object Loading : UiState()
-    object Error : UiState()
-    data class Success(val posts: List<Post>) : UiState()
-}
+data class UiState(
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null,
+    val posts: List<Post> = emptyList()
+)
 
 sealed class UiEvent {
     object Initialize : UiEvent()
