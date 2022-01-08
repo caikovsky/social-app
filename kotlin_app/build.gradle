@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-serialization'
@@ -79,6 +78,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0"
     implementation "androidx.navigation:navigation-compose:2.4.0-rc01"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0-rc01"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
     implementation "androidx.compose.material:material-icons-extended:$rootProject.compose_version"
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

@@ -1,11 +1,11 @@
 package life.league.challenge.kotlin.ui.post
 
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.domain.PostsPerUserUseCase
 import life.league.challenge.kotlin.domain.model.PostPerUserDomain
@@ -13,10 +13,11 @@ import life.league.challenge.kotlin.ui.model.Post
 import javax.inject.Inject
 
 @HiltViewModel
-class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPerUserUseCase) : ViewModel() {
+class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPerUserUseCase) :
+    ViewModel() {
 
-    private var _uiState = mutableStateOf(UiState())
-    val uiState: State<UiState> = _uiState
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
     fun onEvent(uiEvent: UiEvent) {
         when (uiEvent) {
@@ -25,14 +26,14 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
     }
 
     private fun getPostsPerUser() = viewModelScope.launch {
-        _uiState.value = _uiState.value.copy(isLoading = true)
+        _uiState.emit(UiState.Loading)
 
         runCatching { postsPerUserUseCase().toViewEntities() }
             .onSuccess { posts ->
-                _uiState.value = _uiState.value.copy(isLoading = false, posts = posts)
+                _uiState.emit(UiState.Success(posts = posts))
             }.onFailure { throwable ->
                 Log.e(this::class.simpleName, "onEvent: ${throwable.message}")
-                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = throwable.message)
+                _uiState.emit(UiState.Error)
             }
     }
 
@@ -45,15 +46,15 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
             body = domain.posts.last().body
         )
     }
+}
 
-    data class UiState(
-        val isLoading: Boolean = false,
-        val errorMessage: String? = null,
-        val posts: List<Post> = emptyList()
-    )
+sealed class UiState {
+    object Loading : UiState()
+    object Error : UiState()
+    data class Success(val posts: List<Post>) : UiState()
+}
 
-    sealed class UiEvent {
-        object Initialize : UiEvent()
-        object Refresh : UiEvent()
-    }
+sealed class UiEvent {
+    object Initialize : UiEvent()
+    object Refresh : UiEvent()
 }
