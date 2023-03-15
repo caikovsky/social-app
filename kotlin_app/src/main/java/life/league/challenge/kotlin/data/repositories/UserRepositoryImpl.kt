@@ -10,5 +10,5 @@ class UserRepositoryImpl @Inject constructor(private val api: Api) : UserReposit
     override suspend fun invoke(apiKey: String) = api.users(accessToken = apiKey).toDomain()
 
     private fun List<UserResponse>.toDomain(): List<UserDomain> =
-        map { UserDomain(id = it.id, name = it.name, thumbnail = it.avatar.thumbnail) }
+        map { UserDomain(id = it.id, name = it.name, thumbnail = it.avatar) }
 }

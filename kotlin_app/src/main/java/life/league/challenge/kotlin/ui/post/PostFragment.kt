@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.databinding.FragmentPostBinding
 import life.league.challenge.kotlin.ui.post.PostViewModel.State
 import life.league.challenge.kotlin.ui.post.PostViewModel.UiEvent
@@ -21,7 +23,11 @@ class PostFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels()
     private val postAdapter = PostAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentPostBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -45,12 +51,14 @@ class PostFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.state.collect { state ->
-                when (state) {
-                    is State.Loading -> setVisibility(isLoadingShown = true)
-                    is State.Error -> setVisibility(isErrorShown = true)
-                    is State.Content -> handleContent(state)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.state.collect { state ->
+                    when (state) {
+                        is State.Loading -> setVisibility(isLoadingShown = true)
+                        is State.Error -> setVisibility(isErrorShown = true)
+                        is State.Content -> handleContent(state)
+                    }
                 }
             }
         }

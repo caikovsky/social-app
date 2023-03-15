@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserResponse(
     val id: Int,
-    val avatar: AvatarResponse,
+    val avatar: String,
     val name: String,
     val username: String,
     val email: String,
@@ -14,13 +14,6 @@ data class UserResponse(
     val website: String,
     val company: CompanyResponse,
 ) {
-    @Serializable
-    data class AvatarResponse(
-        val large: String,
-        val medium: String,
-        val thumbnail: String,
-    )
-
     @Serializable
     data class AddressResponse(
         val street: String,
