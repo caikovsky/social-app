@@ -5,8 +5,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -25,16 +29,35 @@ import life.league.challenge.kotlin.R
 import life.league.challenge.kotlin.ui.model.Post
 import life.league.challenge.kotlin.ui.post.PostViewModel.State
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PostScreen(
     modifier: Modifier = Modifier,
-    state: State
+    state: State,
+    onRefresh: () -> Unit,
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+    val isLoading = state is State.Loading
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isLoading,
+        onRefresh = { onRefresh() }
+    )
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState)
+    ) {
+        PullRefreshIndicator(
+            refreshing = isLoading,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+
         when (state) {
             is State.Content -> Content(posts = state.posts)
             is State.Error -> Error()
-            is State.Loading -> Loading()
+            is State.Uninitialized -> InitializerIndicator()
+            is State.Loading -> Unit
         }
     }
 }
@@ -51,7 +74,7 @@ private fun Content(
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = rowState
     ) {
@@ -113,7 +136,7 @@ private fun Error(
 }
 
 @Composable
-private fun Loading(
+private fun InitializerIndicator(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -147,7 +170,8 @@ private fun PostScreenContentPreview() {
                         body = "Body 2"
                     ),
                 )
-            )
+            ),
+            onRefresh = {}
         )
     }
 }
@@ -156,7 +180,7 @@ private fun PostScreenContentPreview() {
 @Preview
 private fun PostScreenErrorPreview() {
     Surface(color = Color.White) {
-        PostScreen(state = State.Error)
+        PostScreen(state = State.Error, onRefresh = {})
     }
 }
 
@@ -164,6 +188,6 @@ private fun PostScreenErrorPreview() {
 @Preview
 private fun PostScreenLoadingPreview() {
     Surface(color = Color.White) {
-        PostScreen(state = State.Loading)
+        PostScreen(state = State.Uninitialized, onRefresh = {})
     }
 }

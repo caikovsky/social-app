@@ -28,7 +28,7 @@ class PostFragment : Fragment() {
             setContent {
                 val state by viewModel.state.collectAsState()
 
-                PostScreen(state = state)
+                PostScreen(state = state, onRefresh = { viewModel.onEvent(UiEvent.Refresh) })
             }
         }
     }

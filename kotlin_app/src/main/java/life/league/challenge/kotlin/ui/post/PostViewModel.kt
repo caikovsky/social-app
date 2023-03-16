@@ -16,18 +16,19 @@ import javax.inject.Inject
 @HiltViewModel
 class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPerUserUseCase) : ViewModel() {
 
-    private val _state = MutableStateFlow<State>(State.Loading)
+    private val _state = MutableStateFlow<State>(State.Uninitialized)
     val state: StateFlow<State> get() = _state.asStateFlow()
 
     fun onEvent(uiEvent: UiEvent) {
         when (uiEvent) {
-            is UiEvent.Initialize, UiEvent.Refresh -> getPostsPerUser()
+            is UiEvent.Initialize -> getPostsPerUser()
+            is UiEvent.Refresh -> getPostsPerUser(refresh = true)
         }
     }
 
-    private fun getPostsPerUser() {
+    private fun getPostsPerUser(refresh: Boolean = false) {
         viewModelScope.launch {
-            _state.emit(State.Loading)
+            if (refresh) _state.emit(State.Loading)
 
             try {
                 val posts = postsPerUserUseCase().toViewEntities()
@@ -50,6 +51,7 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
     }
 
     sealed class State {
+        object Uninitialized : State()
         object Loading : State()
         object Error : State()
         data class Content(val posts: List<Post>) : State()
