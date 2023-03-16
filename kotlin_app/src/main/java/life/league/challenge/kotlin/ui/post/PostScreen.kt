@@ -1,21 +1,26 @@
 package life.league.challenge.kotlin.ui.post
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import life.league.challenge.kotlin.R
 import life.league.challenge.kotlin.ui.model.Post
 import life.league.challenge.kotlin.ui.post.PostViewModel.State
@@ -39,21 +44,28 @@ private fun Content(
     modifier: Modifier = Modifier,
     posts: List<Post>
 ) {
+    val rowState = rememberSaveable(posts, saver = LazyListState.Saver) {
+        LazyListState()
+    }
+
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        state = rowState
     ) {
         items(posts) { post ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // TODO: render from url
-                Image(
+                AsyncImage(
                     modifier = Modifier.size(50.dp),
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(post.thumbnail.toUri())
+                        .transformations(CircleCropTransformation())
+                        .build(),
                     contentDescription = null
                 )
 
