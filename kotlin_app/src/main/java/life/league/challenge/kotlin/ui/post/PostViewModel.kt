@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import life.league.challenge.kotlin.domain.PostsPerUserUseCase
 import life.league.challenge.kotlin.domain.model.PostPerUserDomain
@@ -15,8 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPerUserUseCase) : ViewModel() {
 
-    private var _state = MutableStateFlow<State>(State.Loading)
-    val state: StateFlow<State> get() = _state
+    private val _state = MutableStateFlow<State>(State.Loading)
+    val state: StateFlow<State> get() = _state.asStateFlow()
 
     fun onEvent(uiEvent: UiEvent) {
         when (uiEvent) {
