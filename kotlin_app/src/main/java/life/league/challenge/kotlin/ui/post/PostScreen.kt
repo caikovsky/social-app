@@ -3,11 +3,8 @@ package life.league.challenge.kotlin.ui.post
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.*
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -50,7 +47,8 @@ fun PostScreen(
         PullRefreshIndicator(
             refreshing = isLoading,
             state = pullRefreshState,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            contentColor = MaterialTheme.colors.primary
         )
 
         when (state) {
@@ -78,46 +76,60 @@ private fun Content(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = rowState
     ) {
-        items(posts) { post ->
-            Row(
+        itemsIndexed(posts) { index, post ->
+            PostItem(modifier = modifier.fillMaxWidth(), post)
+
+            if (posts.lastIndex != index) {
+                Divider(
+                    modifier = Modifier.padding(top = 16.dp),
+                    color = Color.Gray
+                )
+            } else {
+                Spacer(modifier = Modifier.padding(top = 16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun PostItem(modifier: Modifier = Modifier, post: Post) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AsyncImage(
+            modifier = Modifier.size(50.dp),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(post.thumbnail.toUri())
+                .transformations(CircleCropTransformation())
+                .build(),
+            contentDescription = null
+        )
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp),
+            text = post.name,
+            fontSize = 20.sp,
+            color = Color.Black
+        )
+    }
+
+    Row(modifier = Modifier.padding(top = 12.dp)) {
+        Column {
+            Text(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                AsyncImage(
-                    modifier = Modifier.size(50.dp),
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(post.thumbnail.toUri())
-                        .transformations(CircleCropTransformation())
-                        .build(),
-                    contentDescription = null
-                )
-
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp),
-                    text = post.name,
-                    fontSize = 20.sp,
-                    color = Color.Black
-                )
-            }
-
-            Row(modifier = Modifier.padding(top = 12.dp)) {
-                Column {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = post.title,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = post.body,
-                        fontSize = 13.sp,
-                        color = Color.Gray
-                    )
-                }
-            }
+                text = post.title,
+                fontSize = 16.sp,
+                color = Color.Black
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = post.body,
+                fontSize = 13.sp,
+                color = Color.Gray
+            )
         }
     }
 }
@@ -186,7 +198,7 @@ private fun PostScreenErrorPreview() {
 
 @Composable
 @Preview
-private fun PostScreenLoadingPreview() {
+private fun PostScreenInitializePreview() {
     Surface(color = Color.White) {
         PostScreen(state = State.Uninitialized, onRefresh = {})
     }
