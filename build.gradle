@@ -4,6 +4,7 @@ buildscript {
     ext.gradle_version = '7.4.1'
     ext.hilt_version = '2.45'
     ext.kotlin_version = '1.8.10'
+    ext.detekt_plugin = '1.22.0'
 
     repositories {
         google()
@@ -15,6 +16,7 @@ buildscript {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detekt_plugin"
     }
 }
 

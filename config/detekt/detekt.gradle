@@ -1,0 +1,19 @@
+detekt {
+    toolVersion = "1.22.0"
+    source = files("$rootDir/")
+    config = files("$rootDir/config/detekt/detekt-config.yml")
+    baseline = file("$rootDir/config/detekt/detekt-baseline.xml")
+    parallel = true
+    buildUponDefaultConfig = true
+}
+
+tasks.named("detekt").configure {
+    reports {
+        html.required.set(true)
+        html.outputLocation.set(
+                file("$rootDir/build/reports/detekt.html")
+        )
+    }
+    exclude("**/build/**")
+    exclude("**/tmp/**")
+}

@@ -1,0 +1,9 @@
+# Detekt documentation https://detekt.github.io/detekt/comments.html
+
+naming:
+  ClassNaming:
+    excludes: ['**/test/**']
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']
+  EnumNaming:
+    enumEntryPattern: '[_a-zA-Z0-9]*'
