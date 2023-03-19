@@ -5,7 +5,6 @@ orbs:
 
 executors:
   android-executor:
-    resource_class: xlarge
     docker:
       - image: cimg/android:2022.08
 
