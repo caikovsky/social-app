@@ -16,7 +16,7 @@ jobs:
           steps:
             - run:
                 name: "Build"
-                command: "./gradlew assembleRelease"
+                command: "./gradlew :kotlin_app:assembleRelease"
             - run:
                 name: "Unit tests"
                 command: "./gradlew :kotlin_app:testDebug :kotlin_app:testDebugUnitTest"
