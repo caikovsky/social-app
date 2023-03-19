@@ -1,11 +1,7 @@
 [
   {
     "id": 1,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/men/84.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/men/84.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/men/84.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/men/84.jpg",
     "name": "Leanne Graham",
     "username": "Bret",
     "email": "Sincere@april.biz",
@@ -29,11 +25,7 @@
   },
   {
     "id": 2,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/men/87.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/men/87.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/men/87.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/men/87.jpg",
     "name": "Ervin Howell",
     "username": "Antonette",
     "email": "Shanna@melissa.tv",
@@ -57,11 +49,7 @@
   },
   {
     "id": 3,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/women/68.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/women/68.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/women/68.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/women/68.jpg",
     "name": "Clementine Bauch",
     "username": "Samantha",
     "email": "Nathan@yesenia.net",
@@ -85,11 +73,7 @@
   },
   {
     "id": 4,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/women/54.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/women/54.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/women/54.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/men/86.jpg",
     "name": "Patricia Lebsack",
     "username": "Karianne",
     "email": "Julianne.OConner@kory.org",
@@ -113,11 +97,7 @@
   },
   {
     "id": 5,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/men/79.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/men/79.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/men/79.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/men/86.jpg",
     "name": "Chelsey Dietrich",
     "username": "Kamren",
     "email": "Lucio_Hettinger@annie.ca",
@@ -141,11 +121,7 @@
   },
   {
     "id": 6,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/men/85.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/men/85.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/men/85.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/men/86.jpg",
     "name": "Mrs. Dennis Schulist",
     "username": "Leopoldo_Corkery",
     "email": "Karley_Dach@jasper.info",
@@ -169,11 +145,7 @@
   },
   {
     "id": 7,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/men/8.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/men/8.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/men/8.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/men/86.jpg",
     "name": "Kurtis Weissnat",
     "username": "Elwyn.Skiles",
     "email": "Telly.Hoeger@billy.biz",
@@ -197,11 +169,7 @@
   },
   {
     "id": 8,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/women/81.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/women/81.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/women/81.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/men/86.jpg",
     "name": "Nicholas Runolfsdottir V",
     "username": "Maxime_Nienow",
     "email": "Sherwood@rosamond.me",
@@ -225,11 +193,7 @@
   },
   {
     "id": 9,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/women/84.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/women/84.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/women/84.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/men/86.jpg",
     "name": "Glenna Reichert",
     "username": "Delphine",
     "email": "Chaim_McDermott@dana.io",
@@ -253,11 +217,7 @@
   },
   {
     "id": 10,
-    "avatar": {
-      "large": "https://randomuser.me/api/portraits/men/86.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/men/86.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/men/86.jpg"
-    },
+    "avatar": "https://randomuser.me/api/portraits/men/86.jpg",
     "name": "Clementina DuBuque",
     "username": "Moriah.Stanton",
     "email": "Rey.Padberg@karina.biz",

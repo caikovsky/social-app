@@ -62,7 +62,7 @@ class PostViewModelTest {
     @Test
     fun `error state when something goes wrong`() = runTest {
         mockkStatic(Log::class)
-        every { Log.e(any() as String, any() as String) } returns 1
+        every { Log.e(any() as String, any() as String, any() as Throwable) } returns 1
         coEvery { postsPerUserUseCase(any() as String, any() as String) } throws Exception("")
 
         viewModel.onEvent(UiEvent.Initialize)

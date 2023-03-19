@@ -1,0 +1,38 @@
+version: 2.1
+
+orbs:
+  gradle: circleci/gradle@3.0.0
+
+executors:
+  android-executor:
+    docker:
+      - image: cimg/android:2022.08
+
+jobs:
+  build-and-unit-test:
+    executor: android-executor
+    steps:
+      - gradle/with_cache:
+          steps:
+            - checkout
+            - run:
+                name: "Build"
+                command: "./gradlew :kotlin_app:assembleRelease"
+            - run:
+                name: "Unit tests"
+                command: "./gradlew :kotlin_app:testDebug :kotlin_app:testDebugUnitTest"
+  linting:
+    executor: android-executor
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run:
+                name: "Linting"
+                command: "./gradlew detekt ktlint :kotlin_app:lintDebug"
+  
+workflows:
+  build:
+    jobs:
+      - build-and-unit-test
+      - linting
