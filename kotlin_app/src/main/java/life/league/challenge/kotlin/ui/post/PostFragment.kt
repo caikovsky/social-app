@@ -20,7 +20,7 @@ class PostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         if (savedInstanceState == null) viewModel.onEvent(UiEvent.Initialize)
 

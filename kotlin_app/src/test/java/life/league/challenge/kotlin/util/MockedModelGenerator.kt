@@ -9,7 +9,7 @@ import life.league.challenge.kotlin.ui.model.Post
 object MockedModelGenerator {
     fun getAccountDomain(token: String = "apiKey"): AccountDomain =
         AccountDomain(
-            apiKey = token
+            apiKey = token,
         )
 
     fun getUserDomain(
@@ -19,7 +19,7 @@ object MockedModelGenerator {
     ): UserDomain = UserDomain(
         id = id,
         name = name,
-        thumbnail = thumbnail
+        thumbnail = thumbnail,
     )
 
     fun getPostDomain(
@@ -29,7 +29,7 @@ object MockedModelGenerator {
     ): PostDomain = PostDomain(
         id = id,
         title = title,
-        body = body
+        body = body,
     )
 
     fun getPostPerUserDomain(
@@ -41,7 +41,7 @@ object MockedModelGenerator {
         userId = userId,
         name = name,
         thumbnail = thumbnail,
-        posts = posts
+        posts = posts,
     )
 
     fun getPostPerUserDomainList(): List<PostPerUserDomain> = listOf(getPostPerUserDomain())
@@ -51,6 +51,6 @@ object MockedModelGenerator {
         name = "John Doe",
         thumbnail = "thumbnail_url",
         title = "title",
-        body = "body"
+        body = "body",
     )
 }

@@ -5,5 +5,5 @@ data class Post(
     val name: String,
     val thumbnail: String,
     val title: String,
-    val body: String
+    val body: String,
 )

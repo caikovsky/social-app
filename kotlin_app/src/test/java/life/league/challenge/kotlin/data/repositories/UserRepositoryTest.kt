@@ -1,15 +1,11 @@
 package life.league.challenge.kotlin.data.repositories
 
-import android.util.Base64
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import io.mockk.every
-import io.mockk.mockkStatic
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import life.league.challenge.kotlin.data.api.Api
 import life.league.challenge.kotlin.data.model.AccountResponse
-import life.league.challenge.kotlin.domain.model.AccountDomain
 import life.league.challenge.kotlin.domain.model.UserDomain
 import life.league.challenge.kotlin.util.readFile
 import life.league.challenge.kotlin.util.shouldBe
@@ -43,7 +39,11 @@ class UserRepositoryTest {
         server.enqueue(MockResponse().setBody(readFile("users_response.json")))
 
         val actual = userRepository(accountResponse.apiKey)
-        val expected = UserDomain(id = 1, name = "Leanne Graham", thumbnail = "https://randomuser.me/api/portraits/thumb/men/84.jpg")
+        val expected = UserDomain(
+            id = 1,
+            name = "Leanne Graham",
+            thumbnail = "https://randomuser.me/api/portraits/thumb/men/84.jpg",
+        )
 
         expected shouldBe actual.first()
     }

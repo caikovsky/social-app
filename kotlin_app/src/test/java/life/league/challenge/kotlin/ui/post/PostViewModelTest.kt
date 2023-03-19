@@ -54,7 +54,7 @@ class PostViewModelTest {
         observer.assertValues(
             State.Uninitialized,
             State.Loading,
-            State.Content(expected)
+            State.Content(expected),
         ).finish()
         observer.assertValueCount(3)
     }

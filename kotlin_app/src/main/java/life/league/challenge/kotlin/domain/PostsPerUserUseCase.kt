@@ -29,13 +29,8 @@ class PostsPerUserUseCase @Inject constructor(
                 userId = entry.key.id,
                 name = entry.key.name,
                 thumbnail = entry.key.thumbnail,
-                posts = entry.value
+                posts = entry.value,
             )
         }
     }
 }
-
-
-
-
-
