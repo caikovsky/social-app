@@ -28,13 +28,13 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
 
     private fun getPostsPerUser(refresh: Boolean = false) {
         viewModelScope.launch {
-            if (refresh) _state.emit(State.Loading)
-
-            try {
-                val posts = postsPerUserUseCase().toViewEntities()
+            kotlin.runCatching {
+                if (refresh) _state.emit(State.Loading)
+                postsPerUserUseCase().toViewEntities()
+            }.onSuccess { posts ->
                 _state.emit(State.Content(posts))
-            } catch (e: Exception) {
-                Log.e(this::class.simpleName, "onEvent: ${e.message}")
+            }.onFailure { throwable ->
+                Log.e(TAG, "getPostsPerUser returned a failure", throwable)
                 _state.emit(State.Error)
             }
         }
@@ -46,7 +46,7 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
             name = domain.name,
             thumbnail = domain.thumbnail,
             title = domain.posts.last().title,
-            body = domain.posts.last().body
+            body = domain.posts.last().body,
         )
     }
 
@@ -60,5 +60,9 @@ class PostViewModel @Inject constructor(private val postsPerUserUseCase: PostsPe
     sealed class UiEvent {
         object Initialize : UiEvent()
         object Refresh : UiEvent()
+    }
+
+    private companion object {
+        const val TAG = "PostViewModel"
     }
 }

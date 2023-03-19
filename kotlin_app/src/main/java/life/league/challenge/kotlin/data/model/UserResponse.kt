@@ -36,4 +36,3 @@ data class UserResponse(
         val lng: Double,
     )
 }
-

@@ -1,0 +1,7 @@
+[*.{kt,kts}]
+
+# We should avoid wildcard imports
+ktlint_standard_no-wildcard-imports = enabled
+
+# handled by detekt
+ktlint_standard_filename = disabled

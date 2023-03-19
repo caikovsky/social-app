@@ -7,3 +7,7 @@ naming:
     ignoreAnnotated: ['Composable']
   EnumNaming:
     enumEntryPattern: '[_a-zA-Z0-9]*'
+
+style:
+  UnusedPrivateMember:
+    active: false

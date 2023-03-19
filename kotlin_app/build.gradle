@@ -87,4 +87,4 @@ dependencies {
 }
 
 apply from: "$rootDir/config/detekt/detekt.gradle"
-// apply from: "$rootDir/config/ktlint/ktlint.gradle"
+apply from: "$rootDir/config/ktlint/ktlint.gradle"

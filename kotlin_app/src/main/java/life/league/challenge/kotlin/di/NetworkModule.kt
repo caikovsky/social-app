@@ -41,11 +41,10 @@ object NetworkModule {
     @ExperimentalSerializationApi
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient, BASE_URL: String): Api = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+    fun provideRetrofit(okHttpClient: OkHttpClient, baseUrl: String): Api = Retrofit.Builder()
+        .baseUrl(baseUrl)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .client(okHttpClient)
         .build()
         .create(Api::class.java)
-
 }
