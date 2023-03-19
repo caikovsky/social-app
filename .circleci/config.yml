@@ -1,0 +1,41 @@
+version: 2.1
+
+orbs:
+  gradle: circleci/gradle@3.0.0
+
+executors:
+  android-executor:
+    resource_class: xlarge
+    docker:
+      - image: cimg/android:2022.08
+
+jobs:
+  build-and-unit-test:
+    executor: android-executor
+    steps:
+      - gradle/with_cache:
+          steps:
+            - run:
+                name: "Build"
+                command: "./gradlew assembleStageDebug"
+            - run:
+                name: "Unit tests"
+                command: "./gradlew testStageDebug testDebugUnitTest"
+            - gradle/collect_test_results:
+                reports_path: app/build/reports
+                test_results_path: app/build/test-results
+  linting:
+    executor: android-executor
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run:
+                name: "Linting"
+                command: "./gradlew detekt ktlint lintStageDebug"
+  
+workflows:
+  build:
+    jobs:
+      - build-and-unit-test
+      - linting
