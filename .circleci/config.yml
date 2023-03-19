@@ -16,10 +16,10 @@ jobs:
           steps:
             - run:
                 name: "Build"
-                command: "./gradlew assembleStageDebug"
+                command: "./gradlew :kotlin_app:assembleRelease"
             - run:
                 name: "Unit tests"
-                command: "./gradlew testStageDebug testDebugUnitTest"
+                command: "./gradlew :kotlin_app:testDebug :kotlin_app:testDebugUnitTest"
             - gradle/collect_test_results:
                 reports_path: app/build/reports
                 test_results_path: app/build/test-results
@@ -31,7 +31,7 @@ jobs:
           steps:
             - run:
                 name: "Linting"
-                command: "./gradlew detekt ktlint lintStageDebug"
+                command: "./gradlew detekt ktlint :kotlin_app:lintDebug"
   
 workflows:
   build:
