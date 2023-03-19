@@ -16,13 +16,10 @@ jobs:
           steps:
             - run:
                 name: "Build"
-                command: "./gradlew :kotlin_app:assembleRelease"
+                command: "./gradlew assembleRelease"
             - run:
                 name: "Unit tests"
                 command: "./gradlew :kotlin_app:testDebug :kotlin_app:testDebugUnitTest"
-            - gradle/collect_test_results:
-                reports_path: app/build/reports
-                test_results_path: app/build/test-results
   linting:
     executor: android-executor
     steps:
