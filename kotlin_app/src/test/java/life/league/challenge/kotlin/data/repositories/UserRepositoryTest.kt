@@ -42,7 +42,7 @@ class UserRepositoryTest {
         val expected = UserDomain(
             id = 1,
             name = "Leanne Graham",
-            thumbnail = "https://randomuser.me/api/portraits/thumb/men/84.jpg",
+            thumbnail = "https://randomuser.me/api/portraits/men/84.jpg",
         )
 
         expected shouldBe actual.first()
